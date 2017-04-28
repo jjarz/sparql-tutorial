@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import WorldMap from './components/WorldMap/WorldMap';
 
@@ -8,12 +7,11 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
+          <h2>Use this map to learn about SPARQL</h2>
         </div>
-        <p className="Map-background">
-            <WorldMap />
-        </p>
+
+        <WorldMap />
+
       </div>
     );
   }
