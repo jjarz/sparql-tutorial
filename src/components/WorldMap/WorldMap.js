@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './WorldMap.css';
 import PropTypes from 'prop-types';
+import api from '../../utils/api';
 
 function SelectCountry(props) {
   const countries = ['Switzerland', 'Cocos  Islands', 'North Sudan', 'Paraguay'];
@@ -35,18 +36,32 @@ class WorldMap extends Component {
 
     this.state = {
       selectedCountry: 'Switzerland',
-      population: '???'
+      population: null
     };
 
     this.updateCountry = this.updateCountry.bind(this);
   }
 
+  componentDidMount() {
+    this.updateCountry(this.state.selectedCountry);
+  }
+
   updateCountry(country) {
     this.setState(() => {
       return {
-        selectedCountry: country
+        selectedCountry: country,
+        population: null
       }
     });
+
+    api.fetchPopulation(country)
+      .then((population) => {
+        this.setState(() => {
+          return {
+            population
+          }
+        })
+      });
   }
 
   render() {
