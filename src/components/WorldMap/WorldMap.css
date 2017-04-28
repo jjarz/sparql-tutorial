@@ -1,0 +1,11 @@
+.countries {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+}
+
+.countries li {
+  margin: 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
