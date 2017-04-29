@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import WorldMap from './WorldMap';
+import CountrySelector from './CountrySelector';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
   const updateCountry = () => {};
-  ReactDOM.render(<WorldMap
+  ReactDOM.render(<CountrySelector
       selectedCountry='Switzerland'
-      updateCountry={updateCountry}
+      onSelect={updateCountry}
     />, div);
 });

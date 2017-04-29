@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function QueryInput(props) {
   const inputText =
@@ -10,9 +11,17 @@ WHERE {
 }`;
 
   return (
-    <textarea name="query-input" rows='10' cols='60' value={inputText}>
+    <textarea
+      name="query-input"
+      rows='10' cols='60'
+      value={inputText}
+      readOnly>
     </textarea>
   );
 }
+
+PropTypes.propTypes = {
+  country: PropTypes.string.isRequired
+};
 
 export default QueryInput;

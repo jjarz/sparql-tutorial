@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 function QueryResult(props) {
   return (
@@ -7,5 +8,9 @@ function QueryResult(props) {
     </div>
   );
 }
+
+QueryResult.propTypes = {
+  result: PropTypes.string
+};
 
 export default QueryResult;
