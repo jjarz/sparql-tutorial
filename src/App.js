@@ -17,6 +17,15 @@ class App extends Component {
     this.updateCountry = this.updateCountry.bind(this);
   }
 
+  getMapPolygonGeometries(_callback) {
+    api.getMapPolygonGeometries(_callback)
+      .then((data) => {
+        console.log(data);
+      }, (error) => {
+        console.log(`getMapPolygonGeometries error: ${error}`);
+      });
+  }
+
   updateCountry(country) {
     this.setState(() => {
       return {
@@ -46,6 +55,7 @@ class App extends Component {
           <WorldMap
             updateCountry={this.updateCountry}
             selectedCountry={this.state.selectedCountry}
+            onMapLoad={this.getMapPolygonGeometries}
            />
 
            <QueryContainer

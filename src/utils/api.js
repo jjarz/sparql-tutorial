@@ -28,5 +28,30 @@ module.exports = {
         console.log(`Error calling SPARQL for population: ${error.response.data}`);
         return '???';
       });
+  },
+
+  getMapPolygonGeometries: (drawMap) => {
+    var drawMap = function(data) {
+      console.log(`drawMap data: ${data}`);
+    };
+    // Initialize JSONP request
+    var url = ['https://www.googleapis.com/fusiontables/v1/query?'];
+    url.push('sql=');
+    var query = 'SELECT name, kml_4326 FROM ' +
+        '1foc3xO9DyfSIF6ofvN0kp2bxSfSeKog5FbdWdQ';
+    var encodedQuery = encodeURIComponent(query);
+    url.push(encodedQuery);
+    url.push('&callback=drawMap');
+    url.push('&key=AIzaSyAm9yWCV7JPCTHCJut8whOjARd7pwROFDQ');
+
+
+    return axios.get(url.join(''))
+      .then((response) => {
+        return response['rows'];
+      })
+      .catch((error) => {
+        `getPolygonGeometries axios call failed with error: ${error}`;
+        return [];
+      });
   }
 };

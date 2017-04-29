@@ -1,26 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withGoogleMap, GoogleMap } from 'react-google-maps';
-import styles from './MapProperties';
 import './WorldMap.css';
-
-/*
- * This is the modify version of:
- * https://developers.google.com/maps/documentation/javascript/examples/event-arguments
- *
- * Add <script src="https://maps.googleapis.com/maps/api/js"></script> to your HTML to provide google.maps reference
- */
-const GettingStartedGoogleMap = withGoogleMap(props => (
-  <GoogleMap
-    ref={props.onMapLoad}
-    defaultZoom={3}
-    defaultCenter={{ lat: -25.363882, lng: 131.044922 }}
-    onClick={props.onMapClick}
-    mapTypeId={google.maps.MapTypeId.ROADMAP} // eslint-disable-line no-undef
-    styles={styles}
-  >
-  </GoogleMap>
-));
+import GoogleMapContainer from '../GoogleMapContainer/GoogleMapContainer';
+import styles from './MapProperties';
 
 /**
 * Component to handle the Google Map with clickable countries
@@ -36,24 +18,25 @@ class WorldMap extends Component {
   handleMapClick = this.handleMapClick.bind(this);
 
   handleMapLoad(map) {
-    console.log(styles);
     this._mapComponent = map;
-    if (map) {
-      console.log(map.getZoom());
-    }
+    // this._mapComponent.setOptions({styles: {styles}});
+    this.props.onMapLoad(this.drawMap);
   }
 
   /*
    * This is called when you click on the map.
-   * Go and try click now.
    */
   handleMapClick(event) {
+  }
+
+  drawMap(data) {
+
   }
 
   render() {
     return (
       <div className='map'>
-        <GettingStartedGoogleMap
+        <GoogleMapContainer
           containerElement={
             <div className='map--container' />
           }
@@ -70,7 +53,8 @@ class WorldMap extends Component {
 
 WorldMap.propTypes = {
   selectedCountry: PropTypes.string.isRequired,
-  updateCountry: PropTypes.func.isRequired
+  updateCountry: PropTypes.func.isRequired,
+  onMapLoad: PropTypes.func.isRequired
 };
 
 export default WorldMap;
