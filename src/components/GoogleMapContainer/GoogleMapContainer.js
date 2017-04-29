@@ -15,7 +15,6 @@ const GoogleMapContainer = withGoogleMap(props => (
     ref={props.onMapLoad}
     defaultZoom={3}
     defaultCenter={{ lat: -25.363882, lng: 131.044922 }}
-    onClick={props.onMapClick}
     mapTypeId={google.maps.MapTypeId.ROADMAP} // eslint-disable-line no-undef
   >
   {props.polygons.map(polygon => {
@@ -24,6 +23,7 @@ const GoogleMapContainer = withGoogleMap(props => (
         paths={polygon.paths}
         name={polygon.name}
         key={polygon.name}
+        onCountryClick={props.onCountryClick}
       />
     );
   })}
@@ -31,8 +31,7 @@ const GoogleMapContainer = withGoogleMap(props => (
 ));
 
 GoogleMapContainer.propTypes = {
-  onMapLoad: PropTypes.func.isRequired,
-  onMapClick: PropTypes.func,
+  onCountryClick: PropTypes.func.isRequired,
   polygons: PropTypes.array.isRequired
 }
 

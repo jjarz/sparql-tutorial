@@ -17,7 +17,6 @@ class WorldMap extends Component {
   state = {};
 
   handleMapLoad = this.handleMapLoad.bind(this);
-  handleMapClick = this.handleMapClick.bind(this);
 
   /**
   * Called after google maps is loaded
@@ -27,12 +26,6 @@ class WorldMap extends Component {
   */
   handleMapLoad(map) {
     this._mapComponent = map;
-  }
-
-  /*
-   * This is called when you click on the map.
-   */
-  handleMapClick(event) {
   }
 
   render() {
@@ -46,8 +39,8 @@ class WorldMap extends Component {
             <div className='map--element'/>
           }
           onMapLoad={this.handleMapLoad}
-          onMapClick={this.handleMapClick}
           polygons={this.props.polygons}
+          onCountryClick={this.props.updateCountry}
         />
       </div>
     );

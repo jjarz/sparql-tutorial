@@ -11,6 +11,10 @@ function getPopulationQuery(country) {
   );
 };
 
+function formatNumber(number) {
+  return Number.parseInt(number, 10).toLocaleString();
+};
+
 module.exports = {
   /**
   * Makes call to fetch the population of a country through SPARQL
@@ -24,7 +28,12 @@ module.exports = {
 
     return axios.get(encodedURI)
       .then((response) => {
-        return response.data.results.bindings[0].population.value;
+        if (response.data.results) {
+          return response.data.results.bindings[0] ?
+            formatNumber(response.data.results.bindings[0].population.value) :
+            `The population for ${country} is not in DPBedia :(`;
+        }
+        return 'no results from DBPedia';
       })
       .catch((error) => {
         // TODO: handle multi-word countries
