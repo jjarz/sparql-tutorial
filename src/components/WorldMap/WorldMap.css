@@ -1,0 +1,14 @@
+.map {
+  display: inline-block;
+  height: 700px;
+  float: left;
+  width: 50%;
+}
+
+.map--container {
+  height: 100%;
+}
+
+.map--element {
+  height: 100%;
+}

@@ -42,15 +42,17 @@ class App extends Component {
           <h2>Use this map to learn about SPARQL</h2>
         </div>
 
-        <WorldMap
-          updateCountry={this.updateCountry}
-          selectedCountry={this.state.selectedCountry}
-         />
+        <div>
+          <WorldMap
+            updateCountry={this.updateCountry}
+            selectedCountry={this.state.selectedCountry}
+           />
 
-         <QueryContainer
-          country={this.state.selectedCountry}
-          result={this.state.population}
-          />
+           <QueryContainer
+            country={this.state.selectedCountry}
+            result={this.state.population}
+            />
+          </div>
 
       </div>
     );
