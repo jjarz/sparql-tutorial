@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import './WorldMap.css';
 import GoogleMapContainer from '../GoogleMapContainer/GoogleMapContainer';
-import styles from './MapProperties';
 
 /**
-* Component to handle the Google Map with clickable countries
+* Container component for GoogleMap
+*
+* Handles calls to get geometries for countries and drawing polygons
+* Implements map events, like clicking a country
 */
 class WorldMap extends Component {
   componentDidMount() {
@@ -17,20 +19,20 @@ class WorldMap extends Component {
   handleMapLoad = this.handleMapLoad.bind(this);
   handleMapClick = this.handleMapClick.bind(this);
 
+  /**
+  * Called after google maps is loaded
+  * Makes call to get the country polygons from here
+  *
+  * @param map - the google map passed back from react-google-maps' GoogleMap
+  */
   handleMapLoad(map) {
     this._mapComponent = map;
-    // this._mapComponent.setOptions({styles: {styles}});
-    this.props.onMapLoad(this.drawMap);
   }
 
   /*
    * This is called when you click on the map.
    */
   handleMapClick(event) {
-  }
-
-  drawMap(data) {
-
   }
 
   render() {
@@ -45,6 +47,7 @@ class WorldMap extends Component {
           }
           onMapLoad={this.handleMapLoad}
           onMapClick={this.handleMapClick}
+          polygons={this.props.polygons}
         />
       </div>
     );
@@ -54,7 +57,7 @@ class WorldMap extends Component {
 WorldMap.propTypes = {
   selectedCountry: PropTypes.string.isRequired,
   updateCountry: PropTypes.func.isRequired,
-  onMapLoad: PropTypes.func.isRequired
+  polygons: PropTypes.array.isRequired
 };
 
 export default WorldMap;

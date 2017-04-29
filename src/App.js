@@ -1,31 +1,47 @@
 import React, { Component } from 'react';
 import './App.css';
 import api from './utils/api';
+import mapPolygonUtils from './utils/mapPolygonUtils';
 
 import WorldMap from './components/WorldMap/WorldMap';
 import QueryContainer from './components/QueryContainer/QueryContainer';
 
+/**
+* Container app for the entire application
+*
+* Child components:
+* WorldMap: renders the map that allows users to choose country
+* QueryContainer: renders the query input and result
+*
+*/
 class App extends Component {
   constructor() {
     super();
 
     this.state = {
       selectedCountry: 'Switzerland',
-      population: null
+      population: null,
+      countryPolygons: []
     };
 
     this.updateCountry = this.updateCountry.bind(this);
-  }
 
-  getMapPolygonGeometries(_callback) {
-    api.getMapPolygonGeometries(_callback)
-      .then((data) => {
-        console.log(data);
-      }, (error) => {
-        console.log(`getMapPolygonGeometries error: ${error}`);
+    mapPolygonUtils.createMapPolygons()
+      .then((polygonsResult) => {
+        this.setState(() => {
+          return {
+            countryPolygons: polygonsResult
+          }
+        })
       });
   }
 
+  /**
+  * Callback for country being selected from map
+  * Calls API to fetch the population for given country
+  *
+  * @param country - selected on map
+  */
   updateCountry(country) {
     this.setState(() => {
       return {
@@ -55,7 +71,7 @@ class App extends Component {
           <WorldMap
             updateCountry={this.updateCountry}
             selectedCountry={this.state.selectedCountry}
-            onMapLoad={this.getMapPolygonGeometries}
+            polygons={this.state.countryPolygons}
            />
 
            <QueryContainer

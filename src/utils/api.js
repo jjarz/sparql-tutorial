@@ -12,6 +12,9 @@ function getPopulationQuery(country) {
 };
 
 module.exports = {
+  /**
+  * Makes call to fetch the population of a country through SPARQL
+  */
   fetchPopulation: (country) => {
     const endpoint = 'http://dbpedia.org/sparql';
     const query = getPopulationQuery(country);
@@ -30,10 +33,13 @@ module.exports = {
       });
   },
 
-  getMapPolygonGeometries: (drawMap) => {
-    var drawMap = function(data) {
-      console.log(`drawMap data: ${data}`);
-    };
+  /**
+  * Makes a call to google's Fusion Tables API to retrieve geometries for countries
+  * Adapted from https://developers.google.com/fusiontables/docs/samples/mouseover_map_styles
+  *
+  * @returns response.data.rows from request, if successful. logs error if api call fails
+  */
+  getMapPolygonGeometries: () => {
     // Initialize JSONP request
     var url = ['https://www.googleapis.com/fusiontables/v1/query?'];
     url.push('sql=');
@@ -41,17 +47,20 @@ module.exports = {
         '1foc3xO9DyfSIF6ofvN0kp2bxSfSeKog5FbdWdQ';
     var encodedQuery = encodeURIComponent(query);
     url.push(encodedQuery);
-    url.push('&callback=drawMap');
     url.push('&key=AIzaSyAm9yWCV7JPCTHCJut8whOjARd7pwROFDQ');
-
 
     return axios.get(url.join(''))
       .then((response) => {
-        return response['rows'];
+        if (response.data.rows) {
+          return response.data.rows;
+        } else {
+          console.log(`getPolygonGeometries axios call data in unexpected format: ${response.data}`);
+        }
       })
       .catch((error) => {
-        `getPolygonGeometries axios call failed with error: ${error}`;
-        return [];
+        console.log(`getPolygonGeometries axios call failed with error: ${error}\n
+          Error message: ${error.response.data.error.message}`);
+          return [];
       });
   }
 };
