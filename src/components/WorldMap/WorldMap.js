@@ -10,10 +10,6 @@ import GoogleMapContainer from '../GoogleMapContainer/GoogleMapContainer';
 * Implements map events, like clicking a country
 */
 class WorldMap extends Component {
-  componentDidMount() {
-    this.props.updateCountry(this.props.selectedCountry);
-  }
-
   state = {};
 
   handleMapLoad = this.handleMapLoad.bind(this);

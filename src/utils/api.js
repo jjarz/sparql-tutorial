@@ -1,44 +1,77 @@
 import axios from 'axios';
+import cachingUtils from './cachingUtils';
+
+const endpoint = 'http://dbpedia.org/sparql';
 
 function getPopulationQuery(country) {
   return (
-  `SELECT DISTINCT ?population
-  WHERE {
-    ?x dbp:commonName ?name.
-    FILTER(bif:contains(?name, "${country}")) .
-    ?x dbo:populationTotal ?population.
-  }`
+    `SELECT ?population WHERE {
+      ?country a dbo:Country.
+      ?country dbp:commonName ?commonName.
+      ?country dbp:commonName "${country}"@en.
+      ?country dbo:populationTotal ?population.
+    }`
   );
 };
 
-function formatNumber(number) {
-  return Number.parseInt(number, 10).toLocaleString();
+function formatPopulation(country, number) {
+  return `The population of ${country} is ${Number.parseInt(number, 10).toLocaleString()}`;
 };
 
 module.exports = {
   /**
   * Makes call to fetch the population of a country through SPARQL
   */
-  fetchPopulation: (country) => {
-    const endpoint = 'http://dbpedia.org/sparql';
+  fetchPopulation: (country, cache) => {
     const query = getPopulationQuery(country);
 
     // SPARQL ajax query URI
     const encodedURI = window.encodeURI(`${endpoint}?query=${query}`);
 
+    const cachedResult = cachingUtils.getCachedResult(cache, encodedURI);
+
+    if (cachedResult) {
+      return cachedResult;
+    }
+
     return axios.get(encodedURI)
       .then((response) => {
+        let result;
         if (response.data.results) {
-          return response.data.results.bindings[0] ?
-            formatNumber(response.data.results.bindings[0].population.value) :
+          result = response.data.results.bindings[0] ?
+            formatPopulation(country, response.data.results.bindings[0].population.value) :
             `The population for ${country} is not in DPBedia :(`;
+          cachingUtils.cacheResult(cache, encodedURI, result);
+          return result;
         }
         return 'no results from DBPedia';
       })
       .catch((error) => {
-        // TODO: handle multi-word countries
         console.log(`Error calling SPARQL for population: ${error.response.data}`);
         return '???';
+      });
+  },
+
+  /**
+  * Call SPARQL endpoint with query input (raw input from user's textarea entry)
+  *
+  * @param query
+  */
+  fetchRawQueryResults: (query) => {
+    // SPARQL ajax query URI
+    const encodedURI = window.encodeURI(`${endpoint}?query=${query}&format=text/html`);
+
+    return axios.get(encodedURI)
+      .then((response) => {
+        if (response.data) {
+          return response.data;
+        } else {
+          return response;
+        }
+      })
+      .catch((error) => {
+        console.log(`Error calling SPARQL for population: ${error.response.data}`);
+        return error.response.data;
       });
   },
 

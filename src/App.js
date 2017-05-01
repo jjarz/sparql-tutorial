@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import api from './utils/api';
 import mapPolygonUtils from './utils/mapPolygonUtils';
+import textUtils from './utils/textUtils';
 
 import WorldMap from './components/WorldMap/WorldMap';
 import QueryContainer from './components/QueryContainer/QueryContainer';
@@ -19,12 +20,17 @@ class App extends Component {
     super();
 
     this.state = {
-      selectedCountry: 'Switzerland',
-      population: null,
-      countryPolygons: []
+      selectedCountry: '',
+      queryResult: '',
+      countryPolygons: [],
+      queryInputValue: textUtils.welcomeText
     };
 
     this.updateCountry = this.updateCountry.bind(this);
+    this.onSubmitQuery = this.onSubmitQuery.bind(this);
+    this.handleQueryInputChange = this.handleQueryInputChange.bind(this);
+
+    this.cache = new Map();
 
     mapPolygonUtils.createMapPolygons()
       .then((polygonsResult) => {
@@ -33,6 +39,19 @@ class App extends Component {
             countryPolygons: polygonsResult
           }
         })
+      });
+  }
+
+  onSubmitQuery(query) {
+    api.fetchRawQueryResults(query, this.cache)
+      .then((results) => {
+        this.setState(() => {
+          return {
+            queryResult: results
+          }
+        });
+      }, (error) => {
+
       });
   }
 
@@ -46,18 +65,27 @@ class App extends Component {
     this.setState(() => {
       return {
         selectedCountry: country,
-        population: null
+        population: null,
+        queryInputValue: textUtils.countryQueryText(country)
       }
     });
 
-    api.fetchPopulation(country)
+    api.fetchPopulation(country, this.cache)
       .then((population) => {
         this.setState(() => {
           return {
-            population
+            queryResult: population
           }
         })
       });
+  }
+
+  handleQueryInputChange(inputValue) {
+    this.setState(() => {
+      return {
+        queryInputValue: inputValue
+      }
+    });
   }
 
   render() {
@@ -76,7 +104,10 @@ class App extends Component {
 
            <QueryContainer
             country={this.state.selectedCountry}
-            result={this.state.population}
+            result={this.state.queryResult}
+            onSubmitQuery={this.onSubmitQuery}
+            handleQueryInputChange={this.handleQueryInputChange}
+            queryInputValue={this.state.queryInputValue}
             />
           </div>
 

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Polygon } from 'react-google-maps';
 import PropTypes from 'prop-types';
+import mapOptions from '../../utils/MapProperties';
 
 class CountryPolygon extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       options: {
@@ -14,7 +15,6 @@ class CountryPolygon extends Component {
         strokeOpacity: 1,
         strokeWeight: 0.3
       }
-
     }
   }
 
