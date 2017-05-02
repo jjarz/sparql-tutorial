@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Polygon } from 'react-google-maps';
 import PropTypes from 'prop-types';
-import mapOptions from '../../utils/MapProperties';
 
 class CountryPolygon extends Component {
   constructor(props) {

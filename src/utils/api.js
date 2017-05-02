@@ -18,6 +18,13 @@ function formatPopulation(country, number) {
   return `The population of ${country} is ${Number.parseInt(number, 10).toLocaleString()}`;
 };
 
+const flatten = arr => arr.reduce(
+  (acc, val) => acc.concat(
+    Array.isArray(val) ? flatten(val) : val
+  ),
+  []
+);
+
 module.exports = {
   /**
   * Makes call to fetch the population of a country through SPARQL

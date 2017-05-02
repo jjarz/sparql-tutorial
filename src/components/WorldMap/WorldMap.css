@@ -1,6 +1,6 @@
 .map {
   display: inline-block;
-  height: 700px;
+  height: 450px;
   float: left;
   width: 50%;
 }
@@ -13,7 +13,7 @@
   height: 100%;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 980px) {
   .map {
     height: 300px;
     width: 100%;

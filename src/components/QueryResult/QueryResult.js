@@ -4,8 +4,10 @@ import './QueryResult.css';
 
 function QueryResult(props) {
   return (
-    <div className="query-result">
-      <div dangerouslySetInnerHTML={{__html: `<div>${props.result}</div>`}} />
+    <div className="QueryResult">
+      <h2 className="QueryResult-header">Query Result</h2>
+      <div className="QueryResult-output"
+        dangerouslySetInnerHTML={{__html: `<div>${props.result}</div>`}} />
     </div>
   );
 }

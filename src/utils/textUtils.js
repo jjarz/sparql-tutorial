@@ -7,9 +7,9 @@ module.exports = {
  \\____\\/____/||  make a query for its
  /     /\\\\\\\\\\//  population.
  |     |\\\\\\\\\\
-  \\      \\\\\\\\\\   Or get straight to it and input
-   \\______/\\\\\\\\  your own SPARQL Query here!
-   _||_||_
+  \\      \\\\\\\\\\   Or get straight to it
+   \\______/\\\\\\\\  and input your own
+   _||_||_       SPARQL Query here!
     -- --
   `,
 

@@ -1,3 +1,23 @@
-.query-result {
+.QueryResult {
+  float: left;
+  text-align: center;
+  width: 100%;
   word-wrap: break-word;
+}
+
+@media (max-width: 980px) {
+  .QueryResult {
+    margin-left: 28px;
+    text-align: left;
+  }
+}
+
+/* styles for HTML response from DBPedia */
+table.sparql {
+  table-layout: fixed;
+  width: 100%;
+}
+
+table.sparql td {
+  overflow: auto;
 }

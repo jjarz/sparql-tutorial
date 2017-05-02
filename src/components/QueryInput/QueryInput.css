@@ -1,60 +1,22 @@
-.query-input {
+.QueryInput-textarea {
+  box-sizing: border-box;
+  display: block;
   font-family: monospace;
   padding: 10px;
   font-size: 14px;
+  max-width: 100%;
+  background-color: #fafafa;
+  width: 100%;
+  height: 300px;
 }
 
-.query-form {
-  width: 400px;
-}
-
-.query-submit {
-  margin: 10px 0;
-  padding: 12px 12px;
-
+.QueryInput-submit {
   cursor: pointer;
-  user-select: none;
-  transition: all 60ms ease-in-out;
   text-align: center;
-  white-space: nowrap;
-  text-decoration: none !important;
-  text-transform: none;
-  text-transform: capitalize;
+  margin: 10px 0;
 
   color: #fff;
   border: 0 none;
   border-radius: 4px;
   background: #3ac569;
-
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.3;
-
-  -webkit-appearance: none;
-  -moz-appearance:    none;
-  appearance:         none;
-
-  justify-content: center;
-  align-items: center;
-  flex: 0 0 160px;
-
-  &:hover {
-    transition: all 60ms ease;
-
-    opacity: .85;
-  }
-
-  &:active {
-    transition: all 60ms ease;
-    opacity: .75;
-  }
-
-  &:focus {
-    outline: 1px dotted #959595;
-    outline-offset: -4px;
-  }
-}
-
-.welcome-text {
-  color: #3ac569;
 }

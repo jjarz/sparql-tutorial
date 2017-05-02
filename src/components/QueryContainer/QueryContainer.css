@@ -1,6 +1,23 @@
-.queryContainer {
+.QueryContainer {
   display: inline-block;
   float: left;
   margin-left: 28px;
-  max-width: 47%;
+}
+
+.QueryContainer-header {
+  margin-bottom: 14px;
+}
+
+.QueryContainer {
+  width: 90%;
+}
+
+@media (min-width: 981px) {
+  .QueryContainer {
+    width: 47%;
+  }
+
+  .QueryContainer-header {
+    margin-top: 0;
+  }
 }

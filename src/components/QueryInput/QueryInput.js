@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import QuerySuggestions from '../QuerySuggestions/QuerySuggestions';
 import './QueryInput.css';
 
 class QueryInput extends Component {
@@ -20,17 +21,22 @@ class QueryInput extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit} className='query-form'>
+      <form onSubmit={this.handleSubmit} className='QueryInput-form'>
         <label>
           <textarea
-            className='query-input'
+            className='QueryInput-textarea'
             name='query-input'
-            rows='15' cols='50'
             value={this.props.value}
             onChange={this.handleChange}>
           </textarea>
         </label>
-        <input type="submit" className='query-submit' value="Submit Query" />
+
+        <input type="submit" className='QueryInput-submit queryButton' value="Submit Query" />
+        <QuerySuggestions
+          visible={this.props.showSuggestions}
+          onChangeSuggestedQuery={this.props.onChangeSuggestedQuery}
+          country={this.props.country}
+          />
       </form>
     );
   }
@@ -39,7 +45,8 @@ class QueryInput extends Component {
 PropTypes.propTypes = {
   country: PropTypes.string.isRequired,
   handleQueryInputChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired
+  value: PropTypes.string.isRequired,
+  suggestedQueries: PropTypes.object.isRequired
 };
 
 export default QueryInput;

@@ -3,9 +3,11 @@ import './App.css';
 import api from './utils/api';
 import mapPolygonUtils from './utils/mapPolygonUtils';
 import textUtils from './utils/textUtils';
+import CountryResolver from './utils/CountryResolver';
 
 import WorldMap from './components/WorldMap/WorldMap';
 import QueryContainer from './components/QueryContainer/QueryContainer';
+import QueryResult from './components/QueryResult/QueryResult';
 
 /**
 * Container app for the entire application
@@ -23,14 +25,18 @@ class App extends Component {
       selectedCountry: '',
       queryResult: '',
       countryPolygons: [],
-      queryInputValue: textUtils.welcomeText
+      queryInputValue: textUtils.welcomeText,
+      querySubmitEnabled: false,
+      queryResultClass: ''
     };
 
     this.updateCountry = this.updateCountry.bind(this);
     this.onSubmitQuery = this.onSubmitQuery.bind(this);
     this.handleQueryInputChange = this.handleQueryInputChange.bind(this);
+    this.onChangeSuggestedQuery = this.onChangeSuggestedQuery.bind(this);
 
     this.cache = new Map();
+    this.countryResolver = new CountryResolver();
 
     mapPolygonUtils.createMapPolygons()
       .then((polygonsResult) => {
@@ -42,17 +48,40 @@ class App extends Component {
       });
   }
 
-  onSubmitQuery(query) {
+  /**
+  * Calls API to retreive results for query passed in
+  */
+  fetchRawQueryResults(query) {
     api.fetchRawQueryResults(query, this.cache)
       .then((results) => {
         this.setState(() => {
           return {
-            queryResult: results
+            queryResult: results,
+            queryResultClass: ''
           }
         });
       }, (error) => {
-
+        this.setState(() => {
+          return {
+            queryResult: error,
+            queryError: 'QueryResult--error'
+          }
+        });
       });
+  }
+
+  onChangeSuggestedQuery(query) {
+    this.setState(() => {
+      return {
+        queryInputValue: query
+      }
+    });
+
+    this.fetchRawQueryResults(query);
+  }
+
+  onSubmitQuery(query) {
+    this.fetchRawQueryResults(query);
   }
 
   /**
@@ -70,7 +99,7 @@ class App extends Component {
       }
     });
 
-    api.fetchPopulation(country, this.cache)
+    api.fetchPopulation(this.countryResolver.resolveCountry(country), this.cache)
       .then((population) => {
         this.setState(() => {
           return {
@@ -92,25 +121,30 @@ class App extends Component {
     return (
       <div className="App">
         <div className="App-header">
-          <h2>Use this map to learn about SPARQL</h2>
+          <h2>SPARQLorial</h2>
+          <h4 className="App-subHeader">An app to help you learn about SPARQL</h4>
         </div>
 
-        <div>
-          <WorldMap
-            updateCountry={this.updateCountry}
-            selectedCountry={this.state.selectedCountry}
-            polygons={this.state.countryPolygons}
-           />
+        <div className="App-body">
+          <div>
+            <WorldMap
+              updateCountry={this.updateCountry}
+              selectedCountry={this.state.selectedCountry}
+              polygons={this.state.countryPolygons}
+             />
 
-           <QueryContainer
-            country={this.state.selectedCountry}
-            result={this.state.queryResult}
-            onSubmitQuery={this.onSubmitQuery}
-            handleQueryInputChange={this.handleQueryInputChange}
-            queryInputValue={this.state.queryInputValue}
-            />
+             <QueryContainer
+              country={this.state.selectedCountry}
+              onSubmitQuery={this.onSubmitQuery}
+              handleQueryInputChange={this.handleQueryInputChange}
+              queryInputValue={this.state.queryInputValue}
+              onChangeSuggestedQuery={this.onChangeSuggestedQuery}
+              />
           </div>
+          <div className="clearfix"></div>
 
+          <QueryResult result={this.state.queryResult}/>
+        </div>
       </div>
     );
   }
