@@ -1,7 +1,7 @@
 import axios from 'axios';
 import cachingUtils from './cachingUtils';
 
-const endpoint = 'http://dbpedia.org/sparql';
+const endpoint = 'https://dbpedia.org/sparql';
 
 function getPopulationQuery(country) {
   return (
