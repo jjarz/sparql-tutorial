@@ -51,6 +51,7 @@ module.exports = {
           cachingUtils.cacheResult(cache, encodedURI, result);
           return result;
         }
+        console.log('how about here'); // eslint-disable-line
         return 'no results from DBPedia';
       })
       .catch((error) => {

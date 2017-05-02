@@ -1,14 +1,12 @@
 // Adapted from https://developers.google.com/fusiontables/docs/samples/mouseover_map_styles
 import api from './api';
-// add this line for google global (appears undefined)
-/* eslint-disable no-undef */
 
 function constructNewCoordinates(polygon) {
   var newCoordinates = [];
   var coordinates = polygon['coordinates'][0];
   for (var i in coordinates) {
     newCoordinates.push(
-        new google.maps.LatLng(coordinates[i][1], coordinates[i][0]));
+        new window.google.maps.LatLng(coordinates[i][1], coordinates[i][0]));
   }
   return newCoordinates;
 }

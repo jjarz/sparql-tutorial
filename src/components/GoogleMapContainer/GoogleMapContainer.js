@@ -15,7 +15,6 @@ const GoogleMapContainer = withGoogleMap(props => (
     ref={props.onMapLoad}
     defaultZoom={2}
     defaultCenter={{ lat: 46.8182, lng: 8.2275 }}
-    mapTypeId={google.maps.MapTypeId.ROADMAP} // eslint-disable-line no-undef
   >
   {props.polygons.map(polygon => {
     return (

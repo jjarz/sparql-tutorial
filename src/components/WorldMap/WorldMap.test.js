@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import WorldMap from './WorldMap';
+import { shallow } from 'enzyme';
 
 it('renders without crashing', () => {
-  const div = document.createElement('div');
-  const updateCountry = () => {};
-  ReactDOM.render(<WorldMap
+  const wrapper = shallow(<WorldMap
       selectedCountry='Switzerland'
-      updateCountry={updateCountry}
-    />, div);
+      updateCountry={() => {}}
+      polygons={[]}
+    />);
+  expect(wrapper).toHaveLength(1);
 });
