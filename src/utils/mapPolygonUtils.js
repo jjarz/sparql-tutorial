@@ -1,5 +1,5 @@
 // Adapted from https://developers.google.com/fusiontables/docs/samples/mouseover_map_styles
-import api from './api';
+import fusionTables from './fusionTables';
 
 function constructNewCoordinates(polygon) {
   var newCoordinates = [];
@@ -26,11 +26,11 @@ function constructNewCoordinates(polygon) {
 *
 * @param data - geo data to draw Polygons
 */
-function getMapPolygonGeometriesCallback(rows) {
+function getMapPolygonGeometries(rows) {
   let polygons = [];
 
   for (var i in rows) {
-    if (rows[i][0] !== 'Antarctica') {
+    if (rows[i][0] !== 'Antarctica') { // Antarctica coords cover entire map
       let newCoordinates = [];
       const geometries = rows[i][1]['geometries'];
       if (geometries) {
@@ -55,17 +55,6 @@ module.exports = {
   * Make API call to get coordinate for country polygons, build array of polygon objects
   */
   createMapPolygons: function() {
-    let polygons;
-
-    return new Promise((resolve, reject) => {
-      api.getMapPolygonGeometries()
-        .then((data) => {
-          polygons = getMapPolygonGeometriesCallback(data);
-          resolve(polygons);
-        }, (error) => {
-          console.log(`getMapPolygonGeometries error: ${error}`);
-          reject(polygons);
-        });
-    });
+    return getMapPolygonGeometries(fusionTables.rows);
   }
 };

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import cachingUtils from './cachingUtils';
+import fusionTables from './fusionTables.json';
 
 const endpoint = 'https://dbpedia.org/sparql';
 
@@ -54,8 +55,7 @@ module.exports = {
         return 'no results from DBPedia';
       })
       .catch((error) => {
-        console.log(`Error calling SPARQL for population: ${error.response.data}`);
-        return '???';
+        return `Error calling SPARQL for population: ${error.response.data}`;
       });
   },
 
@@ -86,6 +86,8 @@ module.exports = {
   * Makes a call to google's Fusion Tables API to retrieve geometries for countries
   * Adapted from https://developers.google.com/fusiontables/docs/samples/mouseover_map_styles
   *
+  * NOTE: not used anymore. just pull in JSON file since this doesn't change
+  *
   * @returns response.data.rows from request, if successful. logs error if api call fails
   */
   getMapPolygonGeometries: () => {
@@ -110,7 +112,7 @@ module.exports = {
       .catch((error) => {
         console.log(`getPolygonGeometries axios call failed with error: ${error}\n
           Error message: ${error.response.data.error.message}`);
-          return [];
+          return fusionTables.rows;
       });
   }
 };

@@ -24,7 +24,6 @@ class App extends Component {
     this.state = {
       selectedCountry: '',
       queryResult: '',
-      countryPolygons: [],
       queryInputValue: textUtils.welcomeText,
       querySubmitEnabled: false,
       queryResultClass: ''
@@ -39,18 +38,14 @@ class App extends Component {
     this.countryResolver = new CountryResolver();
 
     // build the polygons data structure to build the countries on the map
-    mapPolygonUtils.createMapPolygons()
-      .then((polygonsResult) => {
-        this.setState(() => {
-          return {
-            countryPolygons: polygonsResult
-          }
-        })
-      });
+    this.countryPolygons = mapPolygonUtils.createMapPolygons();
   }
 
   /**
   * Calls API to retreive results for query passed in
+  *
+  * TODO: Scrub user data
+  *
   */
   fetchRawQueryResults(query) {
     api.fetchRawQueryResults(query, this.cache)
@@ -100,10 +95,17 @@ class App extends Component {
     });
 
     api.fetchPopulation(this.countryResolver.resolveCountry(country), this.cache)
-      .then((population) => {
+      .then((queryResult) => {
         this.setState(() => {
           return {
-            queryResult: population
+            queryResult
+          }
+        })
+      })
+      .catch((error) => {
+        this.setState(() => {
+          return {
+            queryResult: error
           }
         })
       });
@@ -130,7 +132,7 @@ class App extends Component {
             <WorldMap
               updateCountry={this.updateCountry}
               selectedCountry={this.state.selectedCountry}
-              polygons={this.state.countryPolygons}
+              polygons={this.countryPolygons}
              />
 
              <QueryContainer
