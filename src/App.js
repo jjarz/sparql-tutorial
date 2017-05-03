@@ -14,8 +14,8 @@ import QueryResult from './components/QueryResult/QueryResult';
 *
 * Child components:
 * WorldMap: renders the map that allows users to choose country
-* QueryContainer: renders the query input and result
-*
+* QueryContainer: renders the query input and suggested queries select menu
+* QueryResult: renders the query result
 */
 class App extends Component {
   constructor() {
@@ -24,7 +24,6 @@ class App extends Component {
     this.state = {
       selectedCountry: '',
       queryResult: '',
-      countryPolygons: [],
       queryInputValue: textUtils.welcomeText,
       querySubmitEnabled: false,
       queryResultClass: ''
@@ -38,18 +37,15 @@ class App extends Component {
     this.cache = new Map();
     this.countryResolver = new CountryResolver();
 
-    mapPolygonUtils.createMapPolygons()
-      .then((polygonsResult) => {
-        this.setState(() => {
-          return {
-            countryPolygons: polygonsResult
-          }
-        })
-      });
+    // build the polygons data structure to build the countries on the map
+    this.countryPolygons = mapPolygonUtils.createMapPolygons();
   }
 
   /**
   * Calls API to retreive results for query passed in
+  *
+  * TODO: Scrub user data
+  *
   */
   fetchRawQueryResults(query) {
     api.fetchRawQueryResults(query, this.cache)
@@ -94,16 +90,22 @@ class App extends Component {
     this.setState(() => {
       return {
         selectedCountry: country,
-        population: null,
         queryInputValue: textUtils.countryQueryText(country)
       }
     });
 
     api.fetchPopulation(this.countryResolver.resolveCountry(country), this.cache)
-      .then((population) => {
+      .then((queryResult) => {
         this.setState(() => {
           return {
-            queryResult: population
+            queryResult
+          }
+        })
+      })
+      .catch((error) => {
+        this.setState(() => {
+          return {
+            queryResult: error
           }
         })
       });
@@ -130,11 +132,10 @@ class App extends Component {
             <WorldMap
               updateCountry={this.updateCountry}
               selectedCountry={this.state.selectedCountry}
-              polygons={this.state.countryPolygons}
+              polygons={this.countryPolygons}
              />
 
              <QueryContainer
-              country={this.state.selectedCountry}
               onSubmitQuery={this.onSubmitQuery}
               handleQueryInputChange={this.handleQueryInputChange}
               queryInputValue={this.state.queryInputValue}

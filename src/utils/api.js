@@ -1,7 +1,8 @@
 import axios from 'axios';
 import cachingUtils from './cachingUtils';
+import fusionTables from './fusionTables.json';
 
-const endpoint = 'http://dbpedia.org/sparql';
+const endpoint = 'https://dbpedia.org/sparql';
 
 function getPopulationQuery(country) {
   return (
@@ -51,12 +52,10 @@ module.exports = {
           cachingUtils.cacheResult(cache, encodedURI, result);
           return result;
         }
-        console.log('how about here'); // eslint-disable-line
         return 'no results from DBPedia';
       })
       .catch((error) => {
-        console.log(`Error calling SPARQL for population: ${error.response.data}`);
-        return '???';
+        return `Error calling SPARQL for population: ${error.response.data}`;
       });
   },
 
@@ -87,12 +86,15 @@ module.exports = {
   * Makes a call to google's Fusion Tables API to retrieve geometries for countries
   * Adapted from https://developers.google.com/fusiontables/docs/samples/mouseover_map_styles
   *
+  * NOTE: not used anymore. just pull in JSON file since this doesn't change
+  *
   * @returns response.data.rows from request, if successful. logs error if api call fails
   */
   getMapPolygonGeometries: () => {
     // Initialize JSONP request
-    var url = ['https://www.googleapis.com/fusiontables/v1/query?'];
-    url.push('sql=');
+    var url = ['https://www.googleapis.com/fusiontables/v1/query'];
+    url.push('?key=AIzaSyD6Ab4XuDnXaDZfdHHCOZULd174Mgis3Tc');
+    url.push('&sql=');
     var query = 'SELECT name, kml_4326 FROM ' +
         '1foc3xO9DyfSIF6ofvN0kp2bxSfSeKog5FbdWdQ';
     var encodedQuery = encodeURIComponent(query);
@@ -110,7 +112,7 @@ module.exports = {
       .catch((error) => {
         console.log(`getPolygonGeometries axios call failed with error: ${error}\n
           Error message: ${error.response.data.error.message}`);
-          return [];
+          return fusionTables.rows;
       });
   }
 };

@@ -9,7 +9,6 @@ class QueryContainer extends Component {
         <div className="QueryContainer">
           <h2 className="QueryContainer-header">SPARQL Input</h2>
           <QueryInput
-            country={this.props.country}
             onSubmitQuery={this.props.onSubmitQuery}
             handleQueryInputChange={this.props.handleQueryInputChange}
             value={this.props.queryInputValue}
@@ -21,7 +20,6 @@ class QueryContainer extends Component {
 }
 
 QueryContainer.propTypes = {
-  country: PropTypes.string.isRequired,
   queryInputValue: PropTypes.string.isRequired,
   handleQueryInputChange: PropTypes.func.isRequired,
   onChangeSuggestedQuery: PropTypes.func.isRequired
