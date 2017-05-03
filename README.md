@@ -57,4 +57,14 @@ I'm going to be honest - getting this project done in one weekend seemed intimid
 
 From there I could wire in the map without having to do much else to the query functionality.
 
+## Next steps
+
+Features I would like to add given more time...
+* More suggested queries, suggested queries using the selected country
+* Loading state to show the user their query was submitted
+* History of SPARQL query entries - could using local storage or query params for this
+* Query other datasets for more interesting country data
+* More unit testing, functional testing
+* Logging tools, analytics
+
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
