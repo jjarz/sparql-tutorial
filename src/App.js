@@ -14,8 +14,8 @@ import QueryResult from './components/QueryResult/QueryResult';
 *
 * Child components:
 * WorldMap: renders the map that allows users to choose country
-* QueryContainer: renders the query input and result
-*
+* QueryContainer: renders the query input and suggested queries select menu
+* QueryResult: renders the query result
 */
 class App extends Component {
   constructor() {
@@ -38,6 +38,7 @@ class App extends Component {
     this.cache = new Map();
     this.countryResolver = new CountryResolver();
 
+    // build the polygons data structure to build the countries on the map
     mapPolygonUtils.createMapPolygons()
       .then((polygonsResult) => {
         this.setState(() => {
@@ -94,7 +95,6 @@ class App extends Component {
     this.setState(() => {
       return {
         selectedCountry: country,
-        population: null,
         queryInputValue: textUtils.countryQueryText(country)
       }
     });
@@ -134,7 +134,6 @@ class App extends Component {
              />
 
              <QueryContainer
-              country={this.state.selectedCountry}
               onSubmitQuery={this.onSubmitQuery}
               handleQueryInputChange={this.handleQueryInputChange}
               queryInputValue={this.state.queryInputValue}

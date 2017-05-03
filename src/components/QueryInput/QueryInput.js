@@ -35,7 +35,6 @@ class QueryInput extends Component {
         <QuerySuggestions
           visible={this.props.showSuggestions}
           onChangeSuggestedQuery={this.props.onChangeSuggestedQuery}
-          country={this.props.country}
           />
       </form>
     );
@@ -43,7 +42,6 @@ class QueryInput extends Component {
 }
 
 PropTypes.propTypes = {
-  country: PropTypes.string.isRequired,
   handleQueryInputChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired,
   suggestedQueries: PropTypes.object.isRequired

@@ -44,7 +44,6 @@ class WorldMap extends Component {
 }
 
 WorldMap.propTypes = {
-  selectedCountry: PropTypes.string.isRequired,
   updateCountry: PropTypes.func.isRequired,
   polygons: PropTypes.array.isRequired
 };
