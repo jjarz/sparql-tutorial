@@ -3,6 +3,16 @@ sparql-tutorial is a single-page app aimed at helping users learn [SPARQL query]
 ## Structure of the app:
 
 The breakdown of the app's React components:
+* `WorldMap`
+  * `GoogleMapContainer`
+    * `GoogleMap` (using [react-google-maps](https://github.com/tomchentw/react-google-maps))
+    * `CountryPolygon`s
+* `QueryContainer`
+  * `QueryInput`
+    * `QuerySuggestions`
+  * QueryResult
+
+
 ![](https://puu.sh/vDHgT/f42915d201.png)
 
 ## Data flow in the application
@@ -29,7 +39,15 @@ Once the data is retreived, `App` sets the state of `queryResult`, the result of
 ## External data
 I used [`axios`](https://github.com/mzabriskie/axios) to make ajax calls to:
 1. Google's Fusion Tables API to get coordinates to draw the countries on the map and associate them with their country's names.
+  * Retrieved data for country boundaries on startup (based off of https://developers.google.com/fusiontables/docs/samples/mouseover_map_styles)
+  * Formatted this data into `props` for each `CountryPolygon`: `path` and `name` of the country
+  * Used `CountryResolver` for country names that were not exact matches between Google Fusion Table and DBPedia
 2. Make requests to DBPedia with SPARQL queries.
+  * Population query
+    * Country comes in from clicks on `CountryPolygon`
+    * App component resolves the country name w/ `CountryResolver`, sets the `QueryInput`'s inputValue
+    * api builds SPARQL query and sends it off to DBPedia
+    * returns result (data or errors) to App, which sets the `queryResult` on the state to hand back to components
 
 Read more about my process in building the application here.
 
