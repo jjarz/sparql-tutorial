@@ -10,7 +10,7 @@ The breakdown of the app's React components:
 * `QueryContainer`
   * `QueryInput`
     * `QuerySuggestions`
-  * QueryResult
+  * `QueryResult`
 
 
 ![](https://puu.sh/vDHgT/f42915d201.png)
@@ -37,18 +37,24 @@ Once the data is retreived, `App` sets the state of `queryResult`, the result of
 ![](https://puu.sh/vDKC3/20cb1bd6c4.png)
 
 ## External data
-I used [`axios`](https://github.com/mzabriskie/axios) to make ajax calls to:
-1. Google's Fusion Tables API to get coordinates to draw the countries on the map and associate them with their country's names.
+1. Retreived data from Google's Fusion Tables API to get coordinates to draw the countries on the map and associate them with their country's names.
   * Retrieved data for country boundaries on startup (based off of https://developers.google.com/fusiontables/docs/samples/mouseover_map_styles)
+    * Stored this in a JSON file since the data is static
   * Formatted this data into `props` for each `CountryPolygon`: `path` and `name` of the country
   * Used `CountryResolver` for country names that were not exact matches between Google Fusion Table and DBPedia
-2. Make requests to DBPedia with SPARQL queries.
+2. Requested data from DBPedia with SPARQL queries, using `axios`
   * Population query
     * Country comes in from clicks on `CountryPolygon`
     * App component resolves the country name w/ `CountryResolver`, sets the `QueryInput`'s inputValue
     * api builds SPARQL query and sends it off to DBPedia
     * returns result (data or errors) to App, which sets the `queryResult` on the state to hand back to components
+  * Suggested Queries and raw input - `QuerySuggester` and `QueryInput` set state of the `queryInputValue` which feeds into api to call to DBPedia
 
-Read more about my process in building the application here.
+## Process of building the application
+I'm going to be honest - getting this project done in one weekend seemed intimidating.  To make sure I wasn't walking in with nothing functional to show, I built out a [skateboard-version](http://herdingcats.typepad.com/.a/6a00d8341ca4d953ef01a511e114a3970c-pi) of the app before focusing on the more complex problems.  I started with a simple list of a few countries that I plugged into a SPARQL query to get population data.
+
+![](http://g.recordit.co/ICS1rqicam.gif)
+
+From there I could wire in the map without having to do much else to the query functionality.
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
